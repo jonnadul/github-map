@@ -26,6 +26,7 @@ github.authenticate({
 });
 */
 
+/* Spins up the web app server */
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(methodOverride());
@@ -35,43 +36,34 @@ console.log("App listening on port 8080");
 
 /* Routing API */
 app.post('/api/githubmap/:gh_user', function(req, res) {
-	//fs.unlink('public/test.json', function(err) {
-	//	if(err) console.log('File probably doesnt exist');
-	//});
 
-	console.log("Got github username " + req.params.gh_user + " from angular");
+	/* Calls the function call to gather and send
+	 * the github map in JSON format */
 	getFromUser(req.params.gh_user).then( function(data) {
-		console.log("Caught fulfillagain!");
-		
 		res.send(string);
 	});
-
-/*	
-	fs.watchFile('public/test.json', function(curr, prev) {
-		console.log('the current mtime is: ' + curr.mtime);
-		console.log('the previous mtime was: ' + prev.mtime);
-		res.json(string);
-	});
-*/
 });
-
-/*
-app.get('/api/githubmap', function(req, res) {
-	fs.watchFile('public/test.json', function(curr, prev) {
-		console.log('the current mtime is: ' + curr.mtime);
-		console.log('the previous mtime was: ' + prev.mtime);
-		res.json(string);
-	});
-});
-*/
 
 /* Github Backend */
-var num_repos = 0;
-var watch_count = 0;
-var done = 0;
+/* Global vars */
+var num_repos = 0; /* number of repos */
+var watch_count = 0; /* number of watchers */
+var string = ''; /* initially empty JSON resultant */
 
-var string = '';
-
+/**
+ * @name getWatchers
+ *
+ * @desc
+ * 	This function takes a given repo name and
+ * 	gets all the watchers of the repo and fills
+ * 	the global string variable accordingly.
+ *
+ * @param user_name
+ * 	github user name
+ *
+ * @param repo_name
+ * 	github user's repository name
+ */
 function getWatchers(user_name, repo_name) {
 	return new Promise( function(fulfill, reject) {
 		github.repos.getWatchers({
@@ -84,31 +76,29 @@ function getWatchers(user_name, repo_name) {
 				repo_name + '","children": [');
 
 			while (watchers.length > 0) {
-				var watchers_login = JSON.parse(JSON.stringify(watchers.pop().login));
+				var watchers_login = JSON.parse(
+					JSON.stringify(watchers.pop().login));
+				
 				string = string.concat('{"name": "' +
 					watchers_login + '", "size": 3000}');
 			
 				if (watchers.length > 0) {
 					string = string.concat(',');
 				}
-				/*
-				else {
-					string = string.concat("\n");
-				}
-				*/
-			
-
 			}
 
 			string = string.concat(']}');
 		
+			/* Hacky approach */
+			/* Uses the watchers count against the
+			 * number of repos present to determine
+			 * when to no longer expect anymore responses
+			 * from this api call, if the watchers count
+			 * exceeds the number of repos something went
+			 * wrong. */
 			watch_count++;
 
-			console.log("num_repos = " + num_repos +
-				" watch_count = " + watch_count);
-
 			if (watch_count == num_repos) {
-				console.log("fulfilling!");
 				fulfill(res);
 			} else if (watch_count > num_repos) {
 				reject(err);	
@@ -119,11 +109,23 @@ function getWatchers(user_name, repo_name) {
 	});
 }
 
+/**
+ * @name getFromUser
+ *
+ * @desc
+ * 	This function takes a github username and
+ * 	determines all of his repos, then calls
+ * 	getWatchers().
+ *
+ * @param user_name
+ * 	Github username
+ */
 function getFromUser(user_name) {
-	// Reset watch count
+	/* Reset the watch count
+	 * and JSON result
+	 */
 	watch_count = 0;
 	string = '';
-	done = 0;
 
 	string = string.concat('{"name": "' +
 			user_name + '","children": [');
@@ -132,14 +134,14 @@ function getFromUser(user_name) {
 		github.repos.getFromUser({
 			user: user_name
 		}, function(err, res) {
-			console.log("Got user responses!");
 			var repos = JSON.parse(JSON.stringify(res));
 			num_repos = repos.length;
 
 			while (repos.length > 0) {
-				var repo_name = JSON.parse(JSON.stringify(repos.pop().name));
+				var repo_name = JSON.parse(
+					JSON.stringify(repos.pop().name));
+				
 				getWatchers(user_name, repo_name).done( function(res) {
-					console.log("Caught fulfill\n");
 					string = string.concat(']}');
 					
 					fulfill(res);
@@ -149,21 +151,3 @@ function getFromUser(user_name) {
 		});
 	});
 }
-
-function finalizer(res) {
-	string = string.concat("]}\n");
-	done = 1;
-
-	res.json(string);
-
-	/*
-	fs.writeFile("public/test.json", string, function(err) {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log("The file was saved!");
-		}
-	});
-	*/
-}
-
