@@ -1,0 +1,54 @@
+<!-- index.html -->
+<!doctype html>
+
+<html ng-app="ghmapApp">
+	<head>
+		<!-- META -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+		<title>Github-Map</title>
+
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+		<script src="core.js"></script>
+		<script src="d3.js"></script>
+
+		<style>
+			input[name="inputGHUser"]{
+				margin-top: 100px;
+				margin-bottom: 100px;
+				margin-right: 50px;
+				margin-left: 25px;
+			}
+
+			.node circle {
+				fill: #fff;
+				stroke: steelblue;
+				stroke-width: 1.5px;
+			}
+			
+			.node {
+				font: 10px sans-serif;
+			}
+
+			.link {
+				fill: none;
+				stroke: #ccc;
+				stroke-width: 1.5px;
+			}
+		</style>
+	</head>
+	<body ng-controller="mainController">
+		<div class="container">
+			<form ng-submit="setUser()">
+				<input type="text" name="inputGHUser" class="form-control input-lg text-left" ng-model="gh_user" placeholder="enter a github username">
+			</form>
+		</div>
+		
+		<div d3-bars data="data" margin="120"></div>
+	</body>
+</html>
+
