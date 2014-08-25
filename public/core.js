@@ -5,41 +5,16 @@ ghmapApp.controller('mainController', function ($scope, $http) {
 	$scope.gh_user = '';
 	$scope.data = '';
 
-	/*
-	$scope.updateData = function() {
-		$http.get('test.json')
-			.success(function(data) {
-				$scope.data = data;
-			})
-	}
-	*/
-
 	$scope.setUser = function() {
 		console.log('Attempting setUser');
 		$http.post('/api/githubmap/' + $scope.gh_user)
 			.success(function(data) {
-				console.log('got success');
-				console.log('Success setUser: ' +
-					data);
-				console.log('got json data');
 				$scope.data = data
 			})
 			.error(function(data) {
-				console.log('got error');
 				console.log('Error setUser: ' +
 					data);
 			});
-
-			/*
-		$http.get('/api/githubmap')
-			.success(function(data) {
-				console.log('got json data');
-				$scope.data = data
-			})
-			.error(function(data) {
-				console.log('got error');
-			});
-			*/
 	}
 });
 
