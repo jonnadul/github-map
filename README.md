@@ -1,6 +1,8 @@
 github-map
 ==========
 
+![Alt text](screen_shot.png)
+
 This is a simple, single-page, web application that generates a map of public repositories and watchers for a given github user.
 
 Instructions:
