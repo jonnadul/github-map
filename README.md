@@ -13,4 +13,9 @@ This should bring in all the npm dependencies and kick off the node server. Simp
 
 Have fun!
 
-NOTE: To increase the ping'ing bandwidth, establish an authenticated connection to the github api by filling in your <USERNAME> and <PASSWORD> in the node server backend (server.js)
+NOTE: To increase the ping'ing bandwidth, establish an authenticated connection to the github api by filling in your "USERNAME" and "PASSWORD" in the node server backend (server.js)
+
+For some interesting visual results check out these github users:
+[torvalds](https://github.com/torvalds)
+[substack](https://github.com/substack)
+[fabpot](https://github.com/fabpot)
