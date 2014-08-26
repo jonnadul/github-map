@@ -17,17 +17,10 @@
 		<script src="d3.js"></script>
 
 		<style>
-			input[name="inputGHUser"]{
-				margin-top: 100px;
-				margin-bottom: 100px;
-				margin-right: 50px;
-				margin-left: 25px;
-			}
-
 			.node circle {
 				fill: #fff;
-				stroke: steelblue;
-				stroke-width: 1.5px;
+				stroke: #ccc;
+				stroke-width: 3px;
 			}
 			
 			.node {
@@ -37,18 +30,48 @@
 			.link {
 				fill: none;
 				stroke: #ccc;
-				stroke-width: 1.5px;
+				stroke-width: 3px;
 			}
+
+			.center {
+				margin-right: 400px;
+			}
+
+			.title {
+				margin-top: 20px;
+				margin-bottom: 20px;
+				font-weight:bolder;
+				font-size:200;
+				color:black;
+			}
+
 		</style>
 	</head>
 	<body ng-controller="mainController">
+
+		<div class="title" align="center">
+			<div style="display:inline-block;vertical-align:top;">
+				<img align="center" src="img/github_icon.png" width="60" height="60">
+			</div>
+			<div style="display:inline-block;">
+				<font size="200" weight="bolder" align="center">MAP</font>
+			</div>
+		</div>
+
+		<!--<h1 align="center">GITHUBMAP</h1>-->
 		<div class="container">
 			<form ng-submit="setUser()">
-				<input type="text" name="inputGHUser" class="form-control input-lg text-left" ng-model="gh_user" placeholder="enter a github username">
-			</form>
+				<input type="text" name="inputGHUser" align="center" class="form-control input-lg text-center" ng-model="gh_user" placeholder="enter a github username">
+			</form>		
+			
+			<div d3-bars align="center" data="data"></div>
+
+
 		</div>
-		
-		<div d3-bars data="data" margin="120"></div>
 	</body>
+	<footer>
+		<p align="center">Created by <a href="http://jonnadul.github.io/">Srujan Jonnadula</a>
+		source available on <a href="https://github.com/jonnadul/github-map">Github</a></p>
+	</footer>
 </html>
 

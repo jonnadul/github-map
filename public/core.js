@@ -31,9 +31,8 @@ ghmapApp.directive('d3Bars', ['$window', '$timeout', 'd3Service',
 		d3Service.d3().then(function(d3) {
  
           	var renderTimeout;
-          	var margin = parseInt(attrs.margin) || 20;
 		
-		var diameter = 960;
+		var diameter = 1024;
 
 		var tree = d3.layout.tree()
     			.size([360, diameter / 2 - 120])
@@ -44,7 +43,7 @@ ghmapApp.directive('d3Bars', ['$window', '$timeout', 'd3Service',
     			.projection(function(d) {
 				return [d.y, d.x / 180 * Math.PI]; });
  
-		var svg = d3.select("body")
+		var svg = d3.select(ele[0])
 			.append("svg")
     			.attr("width", diameter)
     			.attr("height", diameter)
